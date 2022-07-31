@@ -91,3 +91,4 @@ def parse2():
 
 if __name__ == '__main__':
     parse1()
+    parse2()

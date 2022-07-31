@@ -5,15 +5,15 @@ import numpy as np
 __author__ = "Gallen_qiu"
 
 from PyQt5.Qt import *
-import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtWebEngineWidgets import *
+from analyzer.Report_dealer import Report_dealer
+from analyzer.Report_index import Report_index
 from html_maker import HtmlMaker
 import sys
 import os
 
-from 财报分析.原始报表.原始报表整合 import Report_dealer
-from 财报分析.原始报表.原始报表整合重要财务指标 import Report_index
+from pyqt import contants
 
 currentUrl = os.path.dirname(__file__)
 parentUrl = os.path.abspath(os.path.join(currentUrl, os.pardir))
@@ -29,7 +29,6 @@ class Window(QTabWidget):
         self.scode = scode
         # 生成html
         HtmlMaker(self.scode)
-
         # 获取数据
         self.data = {}
         self.data1 = {}
@@ -46,33 +45,29 @@ class Window(QTabWidget):
         tabbar.setShape(QTabBar.Shape(5))
         # tabbar.setStyleSheet("color:cyan;")
         self.setTabBar(tabbar)
-
         # 最大化
         self.showMaximized()
-
         # 创建3个选项卡小控件窗口
         self.tab1 = QWidget()
         # self.tab1.setStyleSheet("background-color:cyan;")
-        self.tab2 = QWidget()
+        # self.tab2 = QWidget()
         self.tab3 = QWidget()
 
         # 将三个选项卡添加到顶层窗口中
         self.addTab(self.tab1, "Tab 1")
-        self.addTab(self.tab2, "Tab 2")
-        self.addTab(self.tab3, "Tab 3")
+        # self.addTab(self.tab2, "Tab 2")
+        # self.addTab(self.tab3, "Tab 3")
         self.setTabText(0, '主页面')
-        self.setTabText(1, '杜邦分析')
-        self.setTabText(2, '财报分析')
-
+        # self.setTabText(1, '杜邦分析')
+        # self.setTabText(2, '财报分析')
         # 调用子控件
         self.setup_tab1()
-        self.setup_tab3()
+        # self.setup_tab3()
 
     '''获取原始报表数据集合'''
 
     def getData1(self):
-        Ri = Report_dealer(self.scode)
-
+        Ri = Report_dealer(self.scode, years=contants.YEARS)
         self.data = Ri.scheduler()[0]
         '''
         return self.balanceS ,self.incomeS,self.cashFlowS,self.last12
@@ -81,7 +76,7 @@ class Window(QTabWidget):
     '''获取重要指标数据集合'''
 
     def getData2(self):
-        Ri = Report_index(self.scode)
+        Ri = Report_index(self.scode, years=contants.YEARS)
 
         self.data1 = Ri.scheduler()
         '''
@@ -309,19 +304,19 @@ class Window(QTabWidget):
         l_Qlabel00 = QLabel()
         l_Qlabel00.setText('     ')  # 股票名称
         l_Qlabel00.setStyleSheet(
-            "font-size : 50px;font-family : fantasy;font-variant : normal;font-weight : 600;font-style : normal;background-color:#5F9EA0;")
+            "font-size:30px;font-family : fantasy;font-variant : normal;font-weight :300;font-style : normal;background-color:#5F9EA0;")
         l_Qlabel0 = QLabel()
-        l_Qlabel0.setText('    ' + info["SECNAME"])  # 股票名称
+        l_Qlabel0.setText('    ' + info["zwjc"])  # 股票名称
         l_Qlabel0.setStyleSheet(
-            "font-size : 50px;font-family : fantasy;font-variant : normal;font-weight : 600;font-style : normal;background-color:#B0E0E6;")
+            "font-size:30px;font-family : fantasy;font-variant : normal;font-weight :300;font-style : normal;background-color:#B0E0E6;")
         l_Qlabel1 = QLabel()
-        l_Qlabel1.setText('        ' + info["SECCODE"])  # 股票代码
-        l_Qlabel1.setStyleSheet("font-size : 38px;background-color:#B0E0E6;")
+        l_Qlabel1.setText('        ' + info["code"])  # 股票代码
+        l_Qlabel1.setStyleSheet("font-size : 30px;background-color:#B0E0E6;")
 
         l_Qlabel2 = QLabel()
 
-        l_Qlabel2.setText('    行业分类：{}-{}-{}'.format(info["f_kind"], info["s_kind"], info["t_kind"]))  # 股票代码
-        l_Qlabel2.setStyleSheet("font-size : 22px;background-color:#B0E0E6;")
+        l_Qlabel2.setText('    行业分类：{}-{}-{}'.format("行业分类1", "行业分类2", "行业分类3"))  # 股票代码
+        l_Qlabel2.setStyleSheet("font-size : 20px;background-color:#B0E0E6;")
         # self.layout00.addStretch(1)
         self.layout00.addWidget(l_Qlabel00, 1)
         self.layout00.addWidget(l_Qlabel0, 1)
@@ -337,72 +332,71 @@ class Window(QTabWidget):
     def setup_label1(self):
         score = self.score_
 
-        label0 = QLabel("   现金流量(30%)")
-        label0.setStyleSheet("font-size : 22px;")
+        label0 = QLabel("现金流量(30%)")
+        label0.setStyleSheet("font-size :10px;")
         # label0.setContentsMargins()
-        label1 = QLabel(' {}/100.00'.format(round(score["现金占比"] * 10, 2)))
+        label1 = QLabel('{}/100.00'.format(round(score["现金占比"] * 10, 2)))
         label1.setStyleSheet(
-            "font-size : 30px;border:1px solid; border-bottom-color : #B0C4DE;border-top-color : #FFFFFF;border-left-color : #FFFFFF;border-right-color : #FFFFFF;")
+            "font-size : 10px;border:1px solid; border-bottom-color : #B0C4DE;border-top-color : #FFFFFF;border-left-color : #FFFFFF;border-right-color : #FFFFFF;")
 
         box0 = QVBoxLayout()
         box0.addStretch(1)
         box0.addWidget(label0, 2)
         box0.addWidget(label1, 4)
 
-        label0 = QLabel("   运营能力(30%)")
-        label0.setStyleSheet("font-size : 22px;")
-        label1 = QLabel(' {}/100.00'.format(round(score["运营能力"] * 10, 2)))
+        label0 = QLabel("运营能力(30%)")
+        label0.setStyleSheet("font-size : 10px;")
+        label1 = QLabel('{}/100.00'.format(round(score["运营能力"] * 10, 2)))
         label1.setStyleSheet(
-            "font-size : 30px;border:1px solid; border-bottom-color : #B0C4DE;border-top-color : #FFFFFF;border-left-color : #FFFFFF;border-right-color : #FFFFFF;")
+            "font-size : 10px;border:1px solid; border-bottom-color : #B0C4DE;border-top-color : #FFFFFF;border-left-color : #FFFFFF;border-right-color : #FFFFFF;")
 
         box1 = QVBoxLayout()
         box1.addStretch(1)
         box1.addWidget(label0, 2)
         box1.addWidget(label1, 4)
 
-        label0 = QLabel("   盈利能力(20%)")
-        label0.setStyleSheet("font-size : 22px;")
-        label1 = QLabel('  {}/100.00'.format(round(score["盈利能力"] * 10, 2)))
+        label0 = QLabel("盈利能力(20%)")
+        label0.setStyleSheet("font-size : 10px;")
+        label1 = QLabel('{}/100.00'.format(round(score["盈利能力"] * 10, 2)))
         label1.setStyleSheet(
-            "font-size : 30px;border:1px solid; border-bottom-color : #B0C4DE;border-top-color : #FFFFFF;border-left-color : #FFFFFF;border-right-color : #FFFFFF;")
+            "font-size : 10px;border:1px solid; border-bottom-color : #B0C4DE;border-top-color : #FFFFFF;border-left-color : #FFFFFF;border-right-color : #FFFFFF;")
 
         box2 = QVBoxLayout()
         box2.addStretch(1)
         box2.addWidget(label0, 2)
         box2.addWidget(label1, 4)
 
-        label0 = QLabel("   财务结构(10%)")
-        label0.setStyleSheet("font-size : 22px;")
-        label1 = QLabel(' {}/100.00'.format(round(float('%.3f' % score["财务结构"]) * 10, 3)))
+        label0 = QLabel("财务结构(10%)")
+        label0.setStyleSheet("font-size : 10px;")
+        label1 = QLabel('{}/100.00'.format(round(float('%.3f' % score["财务结构"]) * 10, 3)))
         label1.setStyleSheet(
-            "font-size :30px;border:1px solid; border-bottom-color : #B0C4DE;border-top-color : #FFFFFF;border-left-color : #FFFFFF;border-right-color : #FFFFFF;")
+            "font-size :10px;border:1px solid; border-bottom-color : #B0C4DE;border-top-color : #FFFFFF;border-left-color : #FFFFFF;border-right-color : #FFFFFF;")
 
         box3 = QVBoxLayout()
         box3.addStretch(1)
         box3.addWidget(label0, 2)
         box3.addWidget(label1, 4)
 
-        label0 = QLabel("    偿债能力(10%)")
-        label0.setStyleSheet("font-size : 22px;")
-        label1 = QLabel('  {}/100.00'.format(round(score["偿债能力"] * 10, 2)))
+        label0 = QLabel("偿债能力(10%)")
+        label0.setStyleSheet("font-size : 10px;")
+        label1 = QLabel('{}/100.00'.format(round(score["偿债能力"] * 10, 2)))
         label1.setStyleSheet(
-            "font-size : 30px;border:1px solid; border-bottom-color : #B0C4DE;border-top-color : #FFFFFF;border-left-color : #FFFFFF;border-right-color : #FFFFFF;")
+            "font-size : 10px;border:1px solid; border-bottom-color : #B0C4DE;border-top-color : #FFFFFF;border-left-color : #FFFFFF;border-right-color : #FFFFFF;")
 
         box4 = QVBoxLayout()
         box4.addStretch(1)
         box4.addWidget(label0, 2)
         box4.addWidget(label1, 4)
 
-        label0 = QLabel("\n           加权评分")
-        label0.setStyleSheet("background-color:#5F9EA0;font-size : 22px;font-weight : bold;")
+        label0 = QLabel("\n加权评分")
+        label0.setStyleSheet("background-color:#5F9EA0;font-size : 10px;font-weight : bold;")
 
-        label1 = QLabel('  {}/100.00'.format(round(score["Total"], 2)))
+        label1 = QLabel('{}/100.00'.format(round(score["Total"], 2)))
         label1.setStyleSheet(
-            "background-color:#B0E0E6;font-size : 40px;font-weight : 900;border:1px ; border-bottom-color : #B0C4DE;border-top-color : #FFFFFF;border-left-color : #FFFFFF;border-right-color : #FFFFFF;")
+            "background-color:#B0E0E6;font-size : 10px;font-weight : 900;border:1px ; border-bottom-color : #B0C4DE;border-top-color : #FFFFFF;border-left-color : #FFFFFF;border-right-color : #FFFFFF;")
         # label1.setMargin(100)
         box5 = QVBoxLayout()
         box5.setSpacing(0)
-
         # box5.addStretch(1)
         box5.addWidget(label0, 1)
         box5.addWidget(label1, 3)
@@ -413,19 +407,16 @@ class Window(QTabWidget):
         self.layout01.addLayout(box4, 2)
         self.layout01.addLayout(box5, 3)
 
-    '''第三个页面：财报分析展示'''
+    '''第三个页面：财报分析展示 未实现'''
 
     def setup_tab3(self):
         layout = QVBoxLayout()
-
         self.view = QWebEngineView()
-
         layout.addWidget(self.view, 10)
-        with codecs.open("cb.html", "r", "utf-8") as f:
+        with codecs.open("blank.html", "r", "utf-8") as f:
             html = f.read()
         self.view.setHtml(html)
         # self.time = QTimer()
-
         self.tab3.setLayout(layout)
 
 
@@ -557,6 +548,6 @@ class Comment(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)  ##############创建程序，接收外部参数
-    window = Window()  # window是第一个控件，也是顶层控件；会自动添加窗口上沿（缩小、关闭、title）
+    window = Window(scode="603993")  # window是第一个控件，也是顶层控件；会自动添加窗口上沿（缩小、关闭、title）
     window.show()
     sys.exit(app.exec_())  ####################结束程序，返回结束参数；app.exec_()进入消息循环

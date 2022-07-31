@@ -84,7 +84,7 @@ class Xinalang():
             print(info["zwjc"], info["year"])
 
     def scheduler(self):
-        year_list = [2019, 2020, 2021, 2022]
+        year_list = [2016, 2017, 2018, 2019, 2020, 2021, 2022]
         sl = StockList(
             filepath=Contants.NEED_STOCK_PATH)
         result = sl.parse()

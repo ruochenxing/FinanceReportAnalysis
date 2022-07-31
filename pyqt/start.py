@@ -11,9 +11,8 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtGui import QIcon
 
+from StockList import StockList
 from main import Window
-# import startphoto
-import os
 
 
 class Pushbtn_diy(QtWidgets.QPushButton):
@@ -148,8 +147,11 @@ class Ui_Form(object):
         #     name1=name[0][1]
         name1 = firmname
         print(name1)
+        sl = StockList()
+        stock = sl.get_stock_by_name(name1)
+        print(stock.code)
         self.mainpage = QtWidgets.QMainWindow()
-        self.ui = Window(name1)
+        self.ui = Window(scode=stock.code)
         self.ui.show()
         # self.ui.setupUi(self.mainpage)
 

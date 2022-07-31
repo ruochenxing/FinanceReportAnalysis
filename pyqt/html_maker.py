@@ -1,12 +1,16 @@
+import json
 import math
 import numpy as np
 
-from 财报分析.原始报表.原始报表整合重要财务指标 import Report_index
+from analyzer.Report_index import Report_index
+from pyqt import contants
 
 
-class HtmlMaker():
+class HtmlMaker:
 
     def __init__(self, scode):
+        self.data_ = None
+        self.data = None
         self.scode = scode
         self.getData1()
         self.index_maker()
@@ -103,7 +107,7 @@ class HtmlMaker():
     '''获取数据集合'''
 
     def getData1(self):
-        Ri = Report_index(self.scode)
+        Ri = Report_index(self.scode, contants.YEARS)
         self.data = Ri.scheduler()[0]
         self.data_ = Ri.scheduler()
         '''
@@ -180,24 +184,19 @@ class HtmlMaker():
     '''Index_Html生成'''
 
     def index_maker(self):
-
-        '''财务结构'''
+        """财务结构"""
         data01 = self.reverse(self.data["财务结构"]["资产负债率(%)"])
-        print(data01)
-        # data02 = self.reverse(self.data["财务结构"]["长期资金占重资产比率(%)"])
-        data02 = [0, 0, 0, 0]
+        data02 = self.reverse(self.data["财务结构"]["长期资金占重资产比率(%)"])
         '''偿债能力'''
         data11 = self.reverse(self.data["偿债能力"]["流动比率(%)"])
         data12 = self.reverse(self.data["偿债能力"]["速动比率(%)"])
-        # data13 = self.reverse_(self.data["偿债能力"]["利息保障倍数"])
-        data13 = [0, 0, 0, 0]
+        data13 = self.reverse_(self.data["偿债能力"]["利息保障倍数"])
         '''运营能力'''
         data21 = self.reverse_(self.data["运营能力"]["应收款项周转率(次/年)"])
         data22 = self.reverse_(self.data["运营能力"]["应收款项周转天数(天)"])
         data23 = self.reverse_(self.data["运营能力"]["存货周转率(次/年)"])
         data24 = self.reverse_(self.data["运营能力"]["存货周转天数(天)"])
-        # data25 = self.reverse_(self.data["运营能力"]["固定资产周转率(次/年)"])
-        data25 = [0, 0, 0, 0]
+        data25 = self.reverse_(self.data["运营能力"]["固定资产周转率(次/年)"])
         data26 = self.reverse_(self.data["运营能力"]["应付款项周转天数(天)"])
         data27 = self.reverse_(self.data["运营能力"]["总资产周转率(次/年)"])
         '''盈利能力'''
@@ -214,13 +213,12 @@ class HtmlMaker():
         data42 = self.reverse(self.data["成长能力"]["营业利润增长率(%)"])
         data43 = self.reverse(self.data["成长能力"]["净资产增长率(%)"])
         data51 = self.reverse(self.data["现金流量"]["现金流量比率(%)"])
-
         '''html文本'''
         html_region = '''
         <html><head></head><body><div class="shadow-box">
 <div class="sheet-header">
-<h3 class="sheet-header__title" style="color:#495057;font-weight: 500;margin: 0;width: auto;">五大财务比率(+成长能力)</h3>
-    <h3 class="sheet-header__title" style="color:#495057;font-weight: 500;margin: 0;width: auto;">  </h3>
+<h4 class="sheet-header__title" style="color:#495057;font-weight: 500;margin: 0;width: auto;">五大财务比率(+成长能力)</h4>
+    <h3 class="sheet-header__title" style="color:#495057;font-weight: 500;margin: 0;width: auto;">111</h3>
 </div>
 <div class="scroll-container">
 <div class="tab-content" id="alkeyTabContent">
@@ -229,23 +227,23 @@ class HtmlMaker():
 <table class="table table-hover table-scroll">
 <thead>
 <tr>
-<th class="p-1">  类别</th>
+<th class="p-1">类别</th>
 <th class="p-1">财务比率</th>
 <th class="p-1">趋势</th>
 <th class="p-1">
-            2015
+            {report_date_1}
           </th>
 <th class="p-1">
-            2016
+            {report_date_2}
           </th>
 <th class="p-1">
-            2017
+            {report_date_3}
           </th>
 <th class="p-1">
-            2018
+            {report_date_4}
           </th>
 <th class="p-1">
-            近12个月
+            {report_date_5}
           </th>
 </tr>
 </thead>
@@ -356,87 +354,115 @@ class HtmlMaker():
 </div>
 </div>
 </div>
-</div></body></html> '''.format(
-            data01=data01, data01_0=data01[0], data01_1=data01[1], data01_2=data01[2], data01_3=data01[3],
-            data01_4=data01[4],
-            data02=data02, data02_0=data02[0], data02_1=data02[1], data02_2=data02[2], data02_3=data02[3],
-            data02_4=data02[4],
+</div></body></html> '''.format(report_date_1=self.data["报表日期"][0],
+                                report_date_2=self.data["报表日期"][1],
+                                report_date_3=self.data["报表日期"][2],
+                                report_date_4=self.data["报表日期"][3],
+                                report_date_5=self.data["报表日期"][4],
+                                data01=data01, data01_0=data01[0], data01_1=data01[1], data01_2=data01[2],
+                                data01_3=data01[3],
+                                data01_4=data01[4],
+                                data02=data02, data02_0=data02[0], data02_1=data02[1], data02_2=data02[2],
+                                data02_3=data02[3],
+                                data02_4=data02[4],
 
-            data11=data11, data11_0=data11[0], data11_1=data11[1], data11_2=data11[2], data11_3=data11[3],
-            data11_4=data11[4],
-            data12=data12, data12_0=data12[0], data12_1=data12[1], data12_2=data12[2], data12_3=data12[3],
-            data12_4=data12[4],
-            data13=data13, data13_0=data13[0], data13_1=data13[1], data13_2=data13[2], data13_3=data13[3],
-            data13_4=data13[4],
+                                data11=data11, data11_0=data11[0], data11_1=data11[1], data11_2=data11[2],
+                                data11_3=data11[3],
+                                data11_4=data11[4],
+                                data12=data12, data12_0=data12[0], data12_1=data12[1], data12_2=data12[2],
+                                data12_3=data12[3],
+                                data12_4=data12[4],
+                                data13=data13, data13_0=data13[0], data13_1=data13[1], data13_2=data13[2],
+                                data13_3=data13[3],
+                                data13_4=data13[4],
 
-            data21=data21, data21_0=data21[0], data21_1=data21[1], data21_2=data21[2], data21_3=data21[3],
-            data21_4=data21[4],
-            data22=data22, data22_0=data22[0], data22_1=data22[1], data22_2=data22[2], data22_3=data22[3],
-            data22_4=data22[4],
-            data23=data23, data23_0=data23[0], data23_1=data23[1], data23_2=data23[2], data23_3=data23[3],
-            data23_4=data23[4],
-            data24=data24, data24_0=data24[0], data24_1=data24[1], data24_2=data24[2], data24_3=data24[3],
-            data24_4=data24[4],
-            data25=data25, data25_0=data25[0], data25_1=data25[1], data25_2=data25[2], data25_3=data25[3],
-            data25_4=data25[4],
-            data26=data26, data26_0=data26[0], data26_1=data26[1], data26_2=data26[2], data26_3=data26[3],
-            data26_4=data26[4],
-            data27=data27, data27_0=data27[0], data27_1=data27[1], data27_2=data27[2], data27_3=data27[3],
-            data27_4=data27[4],
+                                data21=data21, data21_0=data21[0], data21_1=data21[1], data21_2=data21[2],
+                                data21_3=data21[3],
+                                data21_4=data21[4],
+                                data22=data22, data22_0=data22[0], data22_1=data22[1], data22_2=data22[2],
+                                data22_3=data22[3],
+                                data22_4=data22[4],
+                                data23=data23, data23_0=data23[0], data23_1=data23[1], data23_2=data23[2],
+                                data23_3=data23[3],
+                                data23_4=data23[4],
+                                data24=data24, data24_0=data24[0], data24_1=data24[1], data24_2=data24[2],
+                                data24_3=data24[3],
+                                data24_4=data24[4],
+                                data25=data25, data25_0=data25[0], data25_1=data25[1], data25_2=data25[2],
+                                data25_3=data25[3],
+                                data25_4=data25[4],
+                                data26=data26, data26_0=data26[0], data26_1=data26[1], data26_2=data26[2],
+                                data26_3=data26[3],
+                                data26_4=data26[4],
+                                data27=data27, data27_0=data27[0], data27_1=data27[1], data27_2=data27[2],
+                                data27_3=data27[3],
+                                data27_4=data27[4],
 
-            data31=data31, data31_0=data31[0], data31_1=data31[1], data31_2=data31[2], data31_3=data31[3],
-            data31_4=data31[4],
-            data32=data32, data32_0=data32[0], data32_1=data32[1], data32_2=data32[2], data32_3=data32[3],
-            data32_4=data32[4],
-            data34=data34, data34_0=data34[0], data34_1=data34[1], data34_2=data34[2], data34_3=data34[3],
-            data34_4=data34[4],
-            data35=data35, data35_0=data35[0], data35_1=data35[1], data35_2=data35[2], data35_3=data35[3],
-            data35_4=data35[4],
-            data36=data36, data36_0=data36[0], data36_1=data36[1], data36_2=data36[2], data36_3=data36[3],
-            data36_4=data36[4],
-            data37=data37, data37_0=data37[0], data37_1=data37[1], data37_2=data37[2], data37_3=data37[3],
-            data37_4=data37[4],
-            data38=data38, data38_0=data38[0], data38_1=data38[1], data38_2=data38[2], data38_3=data38[3],
-            data38_4=data38[4],
-            data39=data39, data39_0=data39[0], data39_1=data39[1], data39_2=data39[2], data39_3=data39[3],
-            data39_4=data39[4],
+                                data31=data31, data31_0=data31[0], data31_1=data31[1], data31_2=data31[2],
+                                data31_3=data31[3],
+                                data31_4=data31[4],
+                                data32=data32, data32_0=data32[0], data32_1=data32[1], data32_2=data32[2],
+                                data32_3=data32[3],
+                                data32_4=data32[4],
+                                data34=data34, data34_0=data34[0], data34_1=data34[1], data34_2=data34[2],
+                                data34_3=data34[3],
+                                data34_4=data34[4],
+                                data35=data35, data35_0=data35[0], data35_1=data35[1], data35_2=data35[2],
+                                data35_3=data35[3],
+                                data35_4=data35[4],
+                                data36=data36, data36_0=data36[0], data36_1=data36[1], data36_2=data36[2],
+                                data36_3=data36[3],
+                                data36_4=data36[4],
+                                data37=data37, data37_0=data37[0], data37_1=data37[1], data37_2=data37[2],
+                                data37_3=data37[3],
+                                data37_4=data37[4],
+                                data38=data38, data38_0=data38[0], data38_1=data38[1], data38_2=data38[2],
+                                data38_3=data38[3],
+                                data38_4=data38[4],
+                                data39=data39, data39_0=data39[0], data39_1=data39[1], data39_2=data39[2],
+                                data39_3=data39[3],
+                                data39_4=data39[4],
 
-            data41=data41, data41_0=data41[0], data41_1=data41[1], data41_2=data41[2], data41_3=data41[3],
-            data41_4=data41[4],
-            data42=data42, data42_0=data42[0], data42_1=data42[1], data42_2=data42[2], data42_3=data42[3],
-            data42_4=data42[4],
-            data43=data43, data43_0=data43[0], data43_1=data43[1], data43_2=data43[2], data43_3=data43[3],
-            data43_4=data43[4],
-            data51=data51, data51_0=data51[0], data51_1=data51[1], data51_2=data51[2], data51_3=data51[3],
-            data51_4=data51[4],
+                                data41=data41, data41_0=data41[0], data41_1=data41[1], data41_2=data41[2],
+                                data41_3=data41[3],
+                                data41_4=data41[4],
+                                data42=data42, data42_0=data42[0], data42_1=data42[1], data42_2=data42[2],
+                                data42_3=data42[3],
+                                data42_4=data42[4],
+                                data43=data43, data43_0=data43[0], data43_1=data43[1], data43_2=data43[2],
+                                data43_3=data43[3],
+                                data43_4=data43[4],
+                                data51=data51, data51_0=data51[0], data51_1=data51[1], data51_2=data51[2],
+                                data51_3=data51[3],
+                                data51_4=data51[4],
 
-            polyline01=self.polyline_maker(data01)[0], polygon01=self.polyline_maker(data01)[1],
-            polyline02=self.polyline_maker(data02)[0], polygon02=self.polyline_maker(data02)[1],
-            polyline11=self.polyline_maker(data11)[0], polygon11=self.polyline_maker(data11)[1],
-            polyline12=self.polyline_maker(data12)[0], polygon12=self.polyline_maker(data12)[1],
-            polyline13=self.polyline_maker(data13)[0], polygon13=self.polyline_maker(data13)[1],
+                                polyline01=self.polyline_maker(data01)[0], polygon01=self.polyline_maker(data01)[1],
+                                polyline02=self.polyline_maker(data02)[0], polygon02=self.polyline_maker(data02)[1],
+                                polyline11=self.polyline_maker(data11)[0], polygon11=self.polyline_maker(data11)[1],
+                                polyline12=self.polyline_maker(data12)[0], polygon12=self.polyline_maker(data12)[1],
+                                polyline13=self.polyline_maker(data13)[0], polygon13=self.polyline_maker(data13)[1],
 
-            polyline21=self.polyline_maker(data21)[0], polygon21=self.polyline_maker(data21)[1],
-            polyline22=self.polyline_maker(data22)[0], polygon22=self.polyline_maker(data22)[1],
-            polyline23=self.polyline_maker(data23)[0], polygon23=self.polyline_maker(data23)[1],
-            polyline24=self.polyline_maker(data24)[0], polygon24=self.polyline_maker(data24)[1],
-            polyline25=self.polyline_maker(data25)[0], polygon25=self.polyline_maker(data25)[1],
-            polyline26=self.polyline_maker(data26)[0], polygon26=self.polyline_maker(data26)[1],
-            polyline27=self.polyline_maker(data27)[0], polygon27=self.polyline_maker(data27)[1],
+                                polyline21=self.polyline_maker(data21)[0], polygon21=self.polyline_maker(data21)[1],
+                                polyline22=self.polyline_maker(data22)[0], polygon22=self.polyline_maker(data22)[1],
+                                polyline23=self.polyline_maker(data23)[0], polygon23=self.polyline_maker(data23)[1],
+                                polyline24=self.polyline_maker(data24)[0], polygon24=self.polyline_maker(data24)[1],
+                                polyline25=self.polyline_maker(data25)[0], polygon25=self.polyline_maker(data25)[1],
+                                polyline26=self.polyline_maker(data26)[0], polygon26=self.polyline_maker(data26)[1],
+                                polyline27=self.polyline_maker(data27)[0], polygon27=self.polyline_maker(data27)[1],
 
-            polyline31=self.polyline_maker(data31)[0], polygon31=self.polyline_maker(data31)[1],
-            polyline32=self.polyline_maker(data32)[0], polygon32=self.polyline_maker(data32)[1],
-            polyline34=self.polyline_maker(data34)[0], polygon34=self.polyline_maker(data34)[1],
-            polyline35=self.polyline_maker(data35)[0], polygon35=self.polyline_maker(data35)[1],
-            polyline36=self.polyline_maker(data36)[0], polygon36=self.polyline_maker(data36)[1],
-            polyline37=self.polyline_maker(data37)[0], polygon37=self.polyline_maker(data37)[1],
-            polyline38=self.polyline_maker(data38)[0], polygon38=self.polyline_maker(data38)[1],
-            polyline39=self.polyline_maker(data39)[0], polygon39=self.polyline_maker(data39)[1],
+                                polyline31=self.polyline_maker(data31)[0], polygon31=self.polyline_maker(data31)[1],
+                                polyline32=self.polyline_maker(data32)[0], polygon32=self.polyline_maker(data32)[1],
+                                polyline34=self.polyline_maker(data34)[0], polygon34=self.polyline_maker(data34)[1],
+                                polyline35=self.polyline_maker(data35)[0], polygon35=self.polyline_maker(data35)[1],
+                                polyline36=self.polyline_maker(data36)[0], polygon36=self.polyline_maker(data36)[1],
+                                polyline37=self.polyline_maker(data37)[0], polygon37=self.polyline_maker(data37)[1],
+                                polyline38=self.polyline_maker(data38)[0], polygon38=self.polyline_maker(data38)[1],
+                                polyline39=self.polyline_maker(data39)[0], polygon39=self.polyline_maker(data39)[1],
 
-            polyline41=self.polyline_maker(data41)[0], polygon41=self.polyline_maker(data41)[1],
-            polyline42=self.polyline_maker(data42)[0], polygon42=self.polyline_maker(data42)[1],
-            polyline43=self.polyline_maker(data43)[0], polygon43=self.polyline_maker(data43)[1],
-            polyline51=self.polyline_maker(data51)[0], polygon51=self.polyline_maker(data51)[1])
+                                polyline41=self.polyline_maker(data41)[0], polygon41=self.polyline_maker(data41)[1],
+                                polyline42=self.polyline_maker(data42)[0], polygon42=self.polyline_maker(data42)[1],
+                                polyline43=self.polyline_maker(data43)[0], polygon43=self.polyline_maker(data43)[1],
+                                polyline51=self.polyline_maker(data51)[0], polygon51=self.polyline_maker(data51)[1])
         with open('HTML/rate_index.html', 'w', encoding="utf8") as f:
             f.write(html_region)
 
@@ -856,24 +882,23 @@ class HtmlMaker():
 
     def zfb_maker(self):
         data = self.data_
-
         zc_percent = []
-
-        # print(data[1])
+        print(data[1])
+        print(data[2])
+        zc_percent.extend(data[1]["报表日期"])
         for key in data[2]:
-            # print(key)
             for index_list in data[2][key]:
-                # print(index_list)
-                # print(self.reverse2(data[2][key][index_list])[1:])
+                if key == "报表日期":
+                    continue
                 zc_percent.extend(self.reverse2(data[2][key][index_list])[1:])
-
         cash_list = []
         for key in data[1]:
+            if key == "报表日期":
+                continue
             cash_list.extend(self.reverse3(data[1][key])[1:])
         all_li = []
         all_li.extend(zc_percent)
         all_li.extend(cash_list)
-
         html_text = '''
     <html><head></head><body><div class="col-md-12 col-lg-6 full-screen-col">
     <div class="shadow-box">
@@ -889,11 +914,11 @@ class HtmlMaker():
       <tr>
         <th class="p-1 text-center">类别</th>
         <th class="p-1 text-left">比率(占总资产%)</th>
-          <th class="p-1 text-center">2015</th>
-          <th class="p-1 text-center">2016</th>
-          <th class="p-1 text-center">2017</th>
-          <th class="p-1 text-center">2018</th>
-          <th class="p-1 text-center">2019-06</th>
+          <th class="p-1 text-center">{}</th>
+          <th class="p-1 text-center">{}</th>
+          <th class="p-1 text-center">{}</th>
+          <th class="p-1 text-center">{}</th>
+          <th class="p-1 text-center">{}</th>
       </tr>
     </thead>
     <tbody>
@@ -992,7 +1017,7 @@ class HtmlMaker():
       <tr>
         <td class="text-left p-1">
   <span>
-      <a class="wiki-terms">其他流动资产(%)</a>
+      <a class="wiki-terms">其他流动资产1(%)</a>
   </span>
 </td>
   <td class="text-center p-1">
