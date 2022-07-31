@@ -49,34 +49,34 @@ class Report_index:
         '''资产部分'''
         alr_dict = {}
         # 比率(占总资产%)
-        cap = np.array(info["资产总计"])  # 资产总计
+        cap = np.array(info["资产总计"][:-1])  # 资产总计
         # 现金与约当现金(%)
-        alr_dict["现金与约当现金(%)"] = np.array(info["货币资金"]) / cap
+        alr_dict["现金与约当现金(%)"] = np.array(info["货币资金"][:-1]) / cap
         # 应收款项( %)
-        alr_dict["应收款项( %)"] = np.array(info["应收票据及应收账款"]) / cap
+        alr_dict["应收款项( %)"] = np.array(info["应收票据及应收账款"][:-1]) / cap
         # 存货( %)
-        alr_dict["存货( %)"] = np.array(info["存货"]) / cap
+        alr_dict["存货( %)"] = np.array(info["存货"][:-1]) / cap
         # 其他流动资产(%)
-        alr_dict["其他流动资产(%)"] = np.array(info["其他流动资产"]) / cap
+        alr_dict["其他流动资产(%)"] = np.array(info["其他流动资产"][:-1]) / cap
         # 流动资产( %)
-        alr_dict["流动资产( %)"] = np.array(info["流动资产合计"]) / cap
+        alr_dict["流动资产( %)"] = np.array(info["流动资产合计"][:-1]) / cap
         # 商誉(%)
-        alr_dict["商誉(%)"] = np.array(info["商誉"]) / cap
+        alr_dict["商誉(%)"] = np.array(info["商誉"][:-1]) / cap
         # 非流动资产
-        alr_dict["非流动资产%)"] = np.array(info["非流动资产合计"]) / cap
+        alr_dict["非流动资产%)"] = np.array(info["非流动资产合计"][:-1]) / cap
         '''负债部分'''
         alr_dict_1 = {}
         # 应付账款（%）
-        alr_dict_1["应付账款（%）"] = np.array(info["应付票据及应付账款"]) / cap
+        alr_dict_1["应付账款（%）"] = np.array(info["应付票据及应付账款"][:-1]) / cap
         # 流动负债（%）
-        alr_dict_1["流动负债（%）"] = np.array(info["流动负债合计"]) / cap
+        alr_dict_1["流动负债（%）"] = np.array(info["流动负债合计"][:-1]) / cap
         # 非流动资产（%）
-        alr_dict_1["非流动资产（%）"] = np.array(info["非流动负债合计"]) / cap
+        alr_dict_1["非流动资产（%）"] = np.array(info["非流动负债合计"][:-1]) / cap
 
         '''权益部分'''
         alr_dict_2 = {}
         # 股东权益（%）
-        alr_dict_2["股东权益（%）"] = np.array(info["所有者权益(或股东权益)合计"]) / cap
+        alr_dict_2["股东权益（%）"] = np.array(info["所有者权益(或股东权益)合计"][:-1]) / cap
         if ndarray_display:
             for k, v in alr_dict.items():
                 alr_dict[k] = v.tolist()
@@ -85,7 +85,7 @@ class Report_index:
             for k, v in alr_dict_2.items():
                 alr_dict_2[k] = v.tolist()
         alr_dict_list = {"资产部分": alr_dict, "负债部分": alr_dict_1, "权益部分": alr_dict_2}
-        alr_dict_list["报表日期"] = info["报表日期"]
+        alr_dict_list["报表日期"] = info["报表日期"][:-1]
         self.alr_dict_list = alr_dict_list
 
     # 现金流量表
@@ -93,24 +93,24 @@ class Report_index:
         info = self.info[2]
         cash_flow_dict = {}
         # 期初现金
-        cash_flow_dict["期初现金"] = np.array(info["现金的期初余额"])
+        cash_flow_dict["期初现金"] = np.array(info["现金的期初余额"][:-1])
         # + 营业活动现金流量 (from 损益表)
-        cash_flow_dict["+ 营业活动现金流量 (from 损益表)"] = np.array(info["经营活动产生的现金流量净额"])
+        cash_flow_dict["+ 营业活动现金流量 (from 损益表)"] = np.array(info["经营活动产生的现金流量净额"][:-1])
         # + 投资活动现金流量 (from 资产负债表左)
         cash_flow_dict["+ 投资活动现金流量 (from 资产负债表左)"] = np.array(
-            info["投资活动产生的现金流量净额"])  # 投资活动产生的现金流量净额
+            info["投资活动产生的现金流量净额"][:-1])  # 投资活动产生的现金流量净额
         # + 融资活动现金流量 (from 资产负债表右)
         cash_flow_dict["+ 融资活动现金流量 (from 资产负债表右)"] = np.array(
-            info["筹资活动产生的现金流量净额"])  # 筹资活动产生的现金流量净额
+            info["筹资活动产生的现金流量净额"][:-1])  # 筹资活动产生的现金流量净额
         # 期末现金
-        cash_flow_dict["期末现金"] = np.array(info["六、期末现金及现金等价物余额"])
+        cash_flow_dict["期末现金"] = np.array(info["六、期末现金及现金等价物余额"][:-1])
         # 自由现金流（FCF）=经营活动产生的现金流量净额-购建固定资产、无形资产和其他长期资产支付的现金
-        cash_flow_dict["自由现金流（FCF）"] = np.array(info["经营活动产生的现金流量净额"]) - np.array(
-            info["购建固定资产、无形资产和其他长期资产所支付的现金"])
+        cash_flow_dict["自由现金流（FCF）"] = np.array(info["经营活动产生的现金流量净额"][:-1]) - np.array(
+            info["购建固定资产、无形资产和其他长期资产所支付的现金"][:-1])
         if ndarray_display:
             for k, v in cash_flow_dict.items():
                 cash_flow_dict[k] = v.tolist()
-        cash_flow_dict["报表日期"] = info["报表日期"]
+        cash_flow_dict["报表日期"] = info["报表日期"][:-1]
         self.cash_flow_dict = cash_flow_dict
 
     # #五大财务比率（+成长能力）
@@ -122,15 +122,11 @@ class Report_index:
         dict0 = {}
         dict0["资产负债率(%)"] = np.array(info[0]["负债合计"][:-1]) / np.array(info[0]["资产总计"][:-1])
         dict0["权益乘数"] = np.array(info[0]["资产总计"][:-1]) / np.array(info[0]["所有者权益(或股东权益)合计"][:-1])
-        try:
-            dict0["长期资金占重资产比率(%)"] = (np.array(info[0]["所有者权益(或股东权益)合计"][:-1]) + np.array(
-                info[0]["非流动负债合计"][:-1])) / (np.array(info[0]["在建工程"][:-1]) + np.array(
-                info[0]["固定资产净额"][:-1]) + np.array(info[0]["工程物资"][
-                                                         :-1]))
-        except Exception as e:
-            print("长期资金占重资产比率(%) error")
-            dict0["长期资金占重资产比率(%)"] = 0
-            pass
+        # dict0["长期资金占重资产比率(%)"] = (np.array(info[0]["所有者权益(或股东权益)合计"][:-1]) + np.array(
+        #         info[0]["非流动负债合计"][:-1])) / (np.array(info[0]["在建工程"][:-1]) + np.array(
+        #         info[0]["固定资产净额"][:-1]) + np.array(info[0]["工程物资"][
+        #                                                  :-1]))
+        dict0["长期资金占重资产比率(%)"] = np.array([0, 0, 0, 0, 0])
         # 长期资金占重资产比率(Longterm Ratio) = (股东权益+长期负债)(Total Equity + Non Current Liability) / (固定资产 + 工程物资 + 在建工程)(Fixed
         # Assets + Construction Materials +Construction In Progress)
 
@@ -142,14 +138,10 @@ class Report_index:
             info[0]["应收票据及应收账款"][:-1]) + np.array(info[0]["其他应收款"][:-1]) + np.array(
             info[0]["交易性金融资产"][:-1])) / np.array(info[0]["流动负债合计"][:-1])
         '''缺利息费用，暂时用财务费用'''
-        try:
-            dict1["利息保障倍数"] = (np.array(info[1]["四、利润总额"][:-1]) - np.array(
-                info[1]["财务费用"][:-1])) / np.array(
-                info[1]["财务费用"][:-1])
-        except Exception as e:
-            print("利息保障倍数 error")
-            dict1["利息保障倍数"] = 0
-            pass
+        # dict1["利息保障倍数"] = (np.array(info[1]["四、利润总额"][:-1]) - np.array(
+        #         info[1]["财务费用"][:-1])) / np.array(
+        #         info[1]["财务费用"][:-1])
+        dict1["利息保障倍数"] = np.array([0, 0, 0, 0, 0])
         # 利息保障倍数(Interest Coverage) = 息税前利润(EBITDA) / 利息费用(Interest Expense)
 
         '''运营能力'''

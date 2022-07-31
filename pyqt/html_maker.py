@@ -260,7 +260,7 @@ class HtmlMaker:
             财务结构
           </span>
 </th>
-<td class="p-1"><span><a class="wiki-terms">负债占资产比率(%)</a></span></td><td class="p-1 trend"><span class="line" style="display: none;">{data01}</span><svg class="peity" height="16" width="32"><polygon fill="#c6d9fd" points="{polygon01}"></polygon><polyline fill="none" points="{polyline01}" stroke="#4d89f9" stroke-linecap="square" stroke-width="1"></polyline></svg></td><td class="p-1">{data01_0}</td><td class="p-1">{data01_1}</td><td class="p-1">{data01_2}</td><td class="p-1">{data01_3}</td><td class="p-1">{data01_4}</td>
+<td class="p-1"><span><a class="wiki-terms">资产负债率(%)</a></span></td><td class="p-1 trend"><span class="line" style="display: none;">{data01}</span><svg class="peity" height="16" width="32"><polygon fill="#c6d9fd" points="{polygon01}"></polygon><polyline fill="none" points="{polyline01}" stroke="#4d89f9" stroke-linecap="square" stroke-width="1"></polyline></svg></td><td class="p-1">{data01_0}</td><td class="p-1">{data01_1}</td><td class="p-1">{data01_2}</td><td class="p-1">{data01_3}</td><td class="p-1">{data01_4}</td>
 </tr>
 <tr>
 <td class="p-1"><span><a class="wiki-terms">长期资金占重资产比率(%)</a></span></td><td class="p-1 trend"><span class="line" style="display: none;">{data02}</span><svg class="peity" height="16" width="32"><polygon fill="#c6d9fd" points="{polygon02}"></polygon><polyline fill="none" points="{polyline02}" stroke="#4d89f9" stroke-linecap="square" stroke-width="1"></polyline></svg></td><td class="p-1">{data02_0}</td><td class="p-1">{data02_1}</td><td class="p-1">{data02_2}</td><td class="p-1">{data02_3}</td><td class="p-1">{data02_4}</td>
@@ -899,6 +899,7 @@ class HtmlMaker:
         all_li = []
         all_li.extend(zc_percent)
         all_li.extend(cash_list)
+        print(all_li)
         html_text = '''
     <html><head></head><body><div class="col-md-12 col-lg-6 full-screen-col">
     <div class="shadow-box">
@@ -1127,43 +1128,6 @@ class HtmlMaker:
   </td>
 
       </tr>
-
-
-      <tr class="tr-split-border">
-        <th class="p-1 text-center" rowspan="3">
-          <span class="bar total-debts-trends" style="display: none;">
-            20067293001.48,37035995425.69,38590489400.0,42438186813.48,45514872823.37
-          </span>
-
-          <span>负债</span>
-        </th>
-        <td class="text-left p-1">
-  <span>
-      <a class="wiki-terms">应付款项(%)</a>
-  </span>
-</td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">1.0/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">0.9/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">0.7/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">0.7/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">0.8/100</span>
-    <span>{}</span>
-  </td>
-
-      </tr>
       <tr>
         <td class="text-left p-1">
   <span>
@@ -1188,34 +1152,6 @@ class HtmlMaker:
   </td>
   <td class="text-center p-1">
     <span class="pie" style="display: none;">27.5/100</span>
-    <span>{}</span>
-  </td>
-
-      </tr>
-      <tr>
-        <td class="text-left p-1">
-  <span>
-      <a class="wiki-terms">非流动负债(%)</a>
-  </span>
-</td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">0.0/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">0.0/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">0.0/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">--/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">0.0/100</span>
     <span>{}</span>
   </td>
 
@@ -1457,39 +1393,7 @@ class HtmlMaker:
     {}
   </td>
 
-      </tr>
-      <tr>
-        <td class="p-1">
-  <span>
-    <a class="wiki-terms">自由现金流(FCF)</a>
-    <br>
-    <span class="small">
-
-    </span>
-  </span>
-</td>
-<td class="p-1 trend">
-  <span class="bar" style="display: none;">
-    15374869660.4,36432071510.13,21028018891.68,39778484180.44,45722221215.1
-  </span>
-</td>
-  <td class="p-1">
-    {}
-  </td>
-  <td class="p-1">
-    {}
-  </td>
-  <td class="p-1">
-    {}
-  </td>
-  <td class="p-1">
-    {}
-  </td>
-  <td class="p-1">
-    {}
-  </td>
-
-      </tr>
+  </tr>
     </tbody>
   </table>
           </div>
@@ -1500,7 +1404,7 @@ class HtmlMaker:
       </div>
     </div>
   </div></body></html>
-    '''.format(*all_li)
+        '''.format(*all_li)
 
         with open('HTML/zfb_index.html', 'w', encoding="utf8") as f:
             f.write(html_text)
