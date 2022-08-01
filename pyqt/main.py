@@ -38,7 +38,7 @@ class Window(QTabWidget):
         self.score()
 
         self.setWindowTitle("主窗口")
-        self.resize(500, 500)
+        self.resize(700, 700)
         self.move(400, 200)  # 在显示器上移动
         self.setTabPosition(QTabWidget.South)
         tabbar = QTabBar()
@@ -302,13 +302,13 @@ class Window(QTabWidget):
 
         info = self.data
         l_Qlabel00 = QLabel()
-        l_Qlabel00.setText('     ')  # 股票名称
+        l_Qlabel00.setText("主页面")  # 股票名称
         l_Qlabel00.setStyleSheet(
-            "font-size:30px;font-family : fantasy;font-variant : normal;font-weight :300;font-style : normal;background-color:#5F9EA0;")
+            "font-size:30px;font-family : fantasy;font-variant : normal;font-weight:300;font-style : normal;background-color:#5F9EA0;")
         l_Qlabel0 = QLabel()
         l_Qlabel0.setText('    ' + info["zwjc"])  # 股票名称
         l_Qlabel0.setStyleSheet(
-            "font-size:30px;font-family : fantasy;font-variant : normal;font-weight :300;font-style : normal;background-color:#B0E0E6;")
+            "font-size:30px;font-family : fantasy;font-variant : normal;font-weight:300;font-style : normal;background-color:#B0E0E6;")
         l_Qlabel1 = QLabel()
         l_Qlabel1.setText('        ' + info["code"])  # 股票代码
         l_Qlabel1.setStyleSheet("font-size : 30px;background-color:#B0E0E6;")
@@ -333,7 +333,7 @@ class Window(QTabWidget):
         score = self.score_
 
         label0 = QLabel("现金流量(30%)")
-        label0.setStyleSheet("font-size :10px;")
+        label0.setStyleSheet("font-size :20px;")
         # label0.setContentsMargins()
         label1 = QLabel('{}/100.00'.format(round(score["现金占比"] * 10, 2)))
         label1.setStyleSheet(
@@ -513,7 +513,7 @@ class Comment(QWidget):
         layout = QVBoxLayout()
         view = QWebEngineView()
         layout.addStretch(1)
-        layout.addWidget(view, 24)
+        layout.addWidget(view)
         with codecs.open("HTML/comment.html", "r", "utf-8") as f:
             html = f.read()
         view.setHtml(html)

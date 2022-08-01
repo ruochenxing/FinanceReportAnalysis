@@ -88,7 +88,7 @@ class HtmlMaker:
                     i = "-∞"
 
             elif isinstance(i, float):
-                i = i * 10000  # 数据以万为单位
+                # i = i * 10000  # 数据以万为单位
                 if abs(i) > 100000000:
                     i = str(round(i / 100000000, 2)) + "亿"
                 elif abs(i) > 10000000:
@@ -215,10 +215,10 @@ class HtmlMaker:
         data51 = self.reverse(self.data["现金流量"]["现金流量比率(%)"])
         '''html文本'''
         html_region = '''
-        <html><head></head><body><div class="shadow-box">
+        <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body><div class="shadow-box">
 <div class="sheet-header">
 <h4 class="sheet-header__title" style="color:#495057;font-weight: 500;margin: 0;width: auto;">五大财务比率(+成长能力)</h4>
-    <h3 class="sheet-header__title" style="color:#495057;font-weight: 500;margin: 0;width: auto;">111</h3>
+    <h3 class="sheet-header__title" style="color:#495057;font-weight: 500;margin: 0;width: auto;"></h3>
 </div>
 <div class="scroll-container">
 <div class="tab-content" id="alkeyTabContent">
@@ -354,11 +354,11 @@ class HtmlMaker:
 </div>
 </div>
 </div>
-</div></body></html> '''.format(report_date_1=self.data["报表日期"][0],
-                                report_date_2=self.data["报表日期"][1],
+</div></body></html> '''.format(report_date_1=self.data["报表日期"][4],
+                                report_date_2=self.data["报表日期"][3],
                                 report_date_3=self.data["报表日期"][2],
-                                report_date_4=self.data["报表日期"][3],
-                                report_date_5=self.data["报表日期"][4],
+                                report_date_4=self.data["报表日期"][1],
+                                report_date_5=self.data["报表日期"][0],
                                 data01=data01, data01_0=data01[0], data01_1=data01[1], data01_2=data01[2],
                                 data01_3=data01[3],
                                 data01_4=data01[4],
@@ -731,7 +731,7 @@ class HtmlMaker:
         # print(evaluate4)#偿债能力:1
 
         html_text = '''
-        <html><head></head><body><table class="table table-sm">
+        <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head><body><table class="table table-sm" style="font-size:10px">
     <!-- 现金流 !-->
     <tbody><tr>
   <th class="td_w">
@@ -883,359 +883,432 @@ class HtmlMaker:
     def zfb_maker(self):
         data = self.data_
         zc_percent = []
-        print(data[1])
-        print(data[2])
-        zc_percent.extend(data[1]["报表日期"])
+        tmp = data[2]["报表日期"]
+        tmp.reverse()
+        zc_percent.extend(tmp)
         for key in data[2]:
             for index_list in data[2][key]:
                 if key == "报表日期":
                     continue
-                zc_percent.extend(self.reverse2(data[2][key][index_list])[1:])
+                zc_percent.extend(self.reverse2(data[2][key][index_list]))
         cash_list = []
+        tmp = data[1]["报表日期"]
+        tmp.reverse()
+        cash_list.extend(tmp)
         for key in data[1]:
             if key == "报表日期":
                 continue
-            cash_list.extend(self.reverse3(data[1][key])[1:])
+            cash_list.extend(self.reverse3(data[1][key]))
         all_li = []
         all_li.extend(zc_percent)
         all_li.extend(cash_list)
-        print(all_li)
         html_text = '''
-    <html><head></head><body><div class="col-md-12 col-lg-6 full-screen-col">
+    <html>
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></head>
+<body>
+<div class="col-md-12 col-lg-6 full-screen-col">
     <div class="shadow-box">
-      <div class="sheet-header">
-        <h3 class="sheet-header__title">资产负债比率(重要科目)</h3>
-      </div>
-      <div class="scroll-container">
-        <div class="tab-content" id="albsTabContent">
-          <!-- 年 -->
-          <div class="tab-pane al-description fade active show" id="albs-yearly" role="tabpanel" aria-labelledby="albs-yearly-tab">
-              <table class="table table-hover table-scroll">
-    <thead>
-      <tr>
-        <th class="p-1 text-center">类别</th>
-        <th class="p-1 text-left">比率(占总资产%)</th>
-          <th class="p-1 text-center">{}</th>
-          <th class="p-1 text-center">{}</th>
-          <th class="p-1 text-center">{}</th>
-          <th class="p-1 text-center">{}</th>
-          <th class="p-1 text-center">{}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <th class="p-1 text-center" rowspan="7">
+        <div class="sheet-header">
+            <h3 class="sheet-header__title">资产负债比率(重要科目)</h3>
+        </div>
+        <div class="scroll-container">
+            <div class="tab-content" id="albsTabContent">
+                <!-- 年 -->
+                <div class="tab-pane al-description fade active show" id="albs-yearly" role="tabpanel"
+                     aria-labelledby="albs-yearly-tab">
+                    <table class="table table-hover table-scroll">
+                        <thead>
+                        <tr>
+                            <th class="p-1 text-center">类别</th>
+                            <th class="p-1 text-left">比率(占总资产%)</th>
+                            <th class="p-1 text-center">{}</th>
+                            <th class="p-1 text-center">{}</th>
+                            <th class="p-1 text-center">{}</th>
+                            <th class="p-1 text-center">{}</th>
+                            <th class="p-1 text-center">{}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th class="p-1 text-center" rowspan="7">
           <span class="bar total-assets-trends" style="display: none;">
             86301463422.77,112934538280.41,134610116875.08,159846674736.01,165121648977.73
           </span>
 
-          <span>资产</span>
-        </th>
-        <td class="text-left p-1">
+                                <span>资产</span>
+                            </th>
+                            <td class="text-left p-1">
   <span>
       <a class="wiki-terms">现金与约当现金(%)</a>
   </span>
-</td>
-  <td class="text-center p-1">
+                            </td>
+                            <td class="text-center p-1">
 
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">59.2/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">65.3/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">70.1/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">70.0/100</span>
-    <span>{}</span>
-  </td>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">59.2/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">65.3/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">70.1/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">70.0/100</span>
+                                <span>{}</span>
+                            </td>
 
-      </tr>
-      <tr>
-        <td class="text-left p-1">
+                        </tr>
+                        <tr>
+                            <td class="text-left p-1">
   <span>
       <a class="wiki-terms">应收款项(%)</a>
   </span>
-</td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">9.9/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">0.7/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">0.9/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">0.4/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">0.4/100</span>
-    <span>{}</span>
-  </td>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">9.9/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">0.7/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">0.9/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">0.4/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">0.4/100</span>
+                                <span>{}</span>
+                            </td>
 
-      </tr>
-      <tr>
-        <td class="text-left p-1">
+                        </tr>
+                        <tr>
+                            <td class="text-left p-1">
   <span>
       <a class="wiki-terms">存货(%)</a>
   </span>
-</td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">20.9/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">18.3/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">16.4/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">14.7/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">14.5/100</span>
-    <span>{}</span>
-  </td>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">20.9/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">18.3/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">16.4/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">14.7/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">14.5/100</span>
+                                <span>{}</span>
+                            </td>
 
-      </tr>
+                        </tr>
 
-      <tr>
-        <td class="text-left p-1">
+                        <tr>
+                            <td class="text-left p-1">
   <span>
       <a class="wiki-terms">其他流动资产1(%)</a>
   </span>
-</td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">--/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">0.2/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">0.0/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">0.1/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">0.0/100</span>
-    <span>{}</span>
-  </td>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">--/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">0.2/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">0.0/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">0.1/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">0.0/100</span>
+                                <span>{}</span>
+                            </td>
 
-      </tr>
-      <tr>
-        <td class="text-left p-1">
+                        </tr>
+                        <tr>
+                            <td class="text-left p-1">
   <span>
       <a class="wiki-terms">流动资产(%)</a>
   </span>
-</td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">75.3/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">79.9/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">83.4/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">86.2/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">86.3/100</span>
-    <span>{}</span>
-  </td>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">75.3/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">79.9/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">83.4/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">86.2/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">86.3/100</span>
+                                <span>{}</span>
+                            </td>
 
-      </tr>
+                        </tr>
 
-      <tr>
-        <td class="text-left p-1">
+                        <tr>
+                            <td class="text-left p-1">
   <span>
       <a class="wiki-terms">商誉(%)</a>
   </span>
-</td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">--/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">--/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">--/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">--/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">--/100</span>
-    <span>{}</span>
-  </td>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">--/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">--/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">--/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">--/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">--/100</span>
+                                <span>{}</span>
+                            </td>
 
-      </tr>
-      <tr>
-        <td class="text-left p-1">
+                        </tr>
+                        <tr>
+                            <td class="text-left p-1">
   <span>
       <a class="wiki-terms">非流动资产(%)</a>
   </span>
-</td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">24.7/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">20.1/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">16.6/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">13.8/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">13.7/100</span>
-    <span>{}</span>
-  </td>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">24.7/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">20.1/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">16.6/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">13.8/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">13.7/100</span>
+                                <span>{}</span>
+                            </td>
 
-      </tr>
-      <tr>
-        <td class="text-left p-1">
+                        </tr>
+                        <tr>
+                            <th class="p-1 text-center" rowspan="3">
+          <span class="bar total-assets-trends" style="display: none;">
+            86301463422.77,112934538280.41,134610116875.08,159846674736.01,165121648977.73
+          </span>
+                                <span>负债</span>
+                            </th>
+                            <td class="text-left p-1">
+  <span>
+      <a class="wiki-terms">应付账款（%）</a>
+  </span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">23.2/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">32.8/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">28.7/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">26.5/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">27.5/100</span>
+                                <span>{}</span>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td class="text-left p-1">
   <span>
       <a class="wiki-terms">流动负债(%)</a>
   </span>
-</td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">23.2/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">32.8/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">28.7/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">26.5/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">27.5/100</span>
-    <span>{}</span>
-  </td>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">23.2/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">32.8/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">28.7/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">26.5/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">27.5/100</span>
+                                <span>{}</span>
+                            </td>
 
-      </tr>
-      <tr class="tr-split-border">
-        <th class="p-1 text-center" rowspan="1">
+                        </tr>
+
+                        <tr>
+                            <td class="text-left p-1">
+  <span>
+      <a class="wiki-terms">非流动资产（%）</a>
+  </span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">23.2/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">32.8/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">28.7/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">26.5/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">27.5/100</span>
+                                <span>{}</span>
+                            </td>
+
+                        </tr>
+
+                        <tr class="tr-split-border">
+                            <th class="p-1 text-center" rowspan="1">
 
 
-          <span>权益</span>
-        </th>
-        <td class="text-left p-1">
+                                <span>权益</span>
+                            </th>
+                            <td class="text-left p-1">
   <span>
       <a class="wiki-terms">股东权益(%)</a>
   </span>
-</td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">76.7/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">67.2/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">71.3/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">73.5/100</span>
-    <span>{}</span>
-  </td>
-  <td class="text-center p-1">
-    <span class="pie" style="display: none;">72.4/100</span>
-    <span>{}</span>
-  </td>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">76.7/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">67.2/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">71.3/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">73.5/100</span>
+                                <span>{}</span>
+                            </td>
+                            <td class="text-center p-1">
+                                <span class="pie" style="display: none;">72.4/100</span>
+                                <span>{}</span>
+                            </td>
 
-      </tr>
-    </tbody>
+                        </tr>
+                        </tbody>
 
 
-  </table>
-          </div>
-          <!-- 季度 -->
-          <!-- <div class="tab-pane al-description fade" id="albs-quarterly" role="tabpanel" aria-labelledby="albs-quarterly-tab"> -->
-          <!-- </div> -->
+                    </table>
+                </div>
+                <!-- 季度 -->
+                <!-- <div class="tab-pane al-description fade" id="albs-quarterly" role="tabpanel" aria-labelledby="albs-quarterly-tab"> -->
+                <!-- </div> -->
+            </div>
         </div>
-      </div>
     </div>
 
     <div class="shadow-box my-3">
-      <div class="sheet-header">
-        <h3 class="sheet-header__title">现金流量表</h3>
-      </div>
-      <div class="scroll-container">
-        <div class="tab-content" id="alcfTabContent">
-          <!-- 年 -->
-          <div class="tab-pane al-description fade active show" id="alcf-yearly" role="tabpanel" aria-labelledby="alcf-alyearly-tab">
-              <table class="table table-hover table-scroll">
-    <thead>
-      <tr>
-        <th class="p-1">类别</th>
-        <th class="p-1">
-          </th><th class="p-1">
-            2015
-          </th>
-          <th class="p-1">
-            2016
-          </th>
-          <th class="p-1">
-            2017
-          </th>
-          <th class="p-1">
-            2018
-          </th>
-          <th class="p-1">
-            近12个月
-          </th>
+        <div class="sheet-header">
+            <h3 class="sheet-header__title">现金流量表</h3>
+        </div>
+        <div class="scroll-container">
+            <div class="tab-content" id="alcfTabContent">
+                <!-- 年 -->
+                <div class="tab-pane al-description fade active show" id="alcf-yearly" role="tabpanel"
+                     aria-labelledby="alcf-alyearly-tab">
+                    <table class="table table-hover table-scroll">
+                        <thead>
+                        <tr>
+                            <th class="p-1">类别</th>
+                            <th class="p-1">
+                            </th>
+                            <th class="p-1">
+                                {}
+                            </th>
+                            <th class="p-1">
+                                {}
+                            </th>
+                            <th class="p-1">
+                                {}
+                            </th>
+                            <th class="p-1">
+                                {}
+                            </th>
+                            <th class="p-1">
+                                {}
+                            </th>
 
-      </tr>
-    </thead>
+                        </tr>
+                        </thead>
 
-    <tbody>
-      <tr class="table-secondary">
-        <td class="p-1">
+                        <tbody>
+                        <tr class="table-secondary">
+                            <td class="p-1">
   <span>
     期初现金
     <br>
@@ -1243,31 +1316,31 @@ class HtmlMaker:
 
     </span>
   </span>
-</td>
-<td class="p-1 trend">
+                            </td>
+                            <td class="p-1 trend">
   <span class="bar" style="display: none;">
     24997229197.76,34780485904.57,62794794812.99,74928080750.58,78068393291.94
   </span>
-</td>
-  <td class="p-1">
-    {}
-  </td>
-  <td class="p-1">
-    {}
-  </td>
-  <td class="p-1">
-    {}
-  </td>
-  <td class="p-1">
-    {}
-  </td>
-  <td class="p-1">
-    {}
-  </td>
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
 
-      </tr>
-      <tr>
-        <td class="p-1">
+                        </tr>
+                        <tr>
+                            <td class="p-1">
   <span>
     <a class="wiki-terms">+ 营业活动现金流量</a>
     <br>
@@ -1275,31 +1348,31 @@ class HtmlMaker:
        (from 损益表)
     </span>
   </span>
-</td>
-<td class="p-1 trend">
+                            </td>
+                            <td class="p-1 trend">
   <span class="bar" style="display: none;">
     17436340141.72,37451249647.05,22153036084.13,41385234406.72,47737123590.96
   </span>
-</td>
-  <td class="p-1">
-    {}
-  </td>
-  <td class="p-1">
-    {}
-  </td>
-  <td class="p-1">
-    {}
-  </td>
-  <td class="p-1">
-    {}
-  </td>
-  <td class="p-1">
-    {}
-  </td>
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
 
-      </tr>
-      <tr>
-        <td class="p-1">
+                        </tr>
+                        <tr>
+                            <td class="p-1">
   <span>
     <a class="wiki-terms">+ 投资活动现金流量</a>
     <br>
@@ -1307,31 +1380,31 @@ class HtmlMaker:
        (from 资产负债表左)
     </span>
   </span>
-</td>
-<td class="p-1 trend">
+                            </td>
+                            <td class="p-1 trend">
   <span class="bar" style="display: none;">
     -2048790264.59,-1102500804.2,-1120645214.6,-1628962704.56,-2025564645.33
   </span>
-</td>
-  <td class="p-1">
-    {}
-  </td>
-  <td class="p-1">
-    {}
-  </td>
-  <td class="p-1">
-    {}
-  </td>
-  <td class="p-1">
-    {}
-  </td>
-  <td class="p-1">
-    {}
-  </td>
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
 
-      </tr>
-      <tr>
-        <td class="p-1">
+                        </tr>
+                        <tr>
+                            <td class="p-1">
   <span>
     <a class="wiki-terms">+ 融资活动现金流量</a>
     <br>
@@ -1339,31 +1412,31 @@ class HtmlMaker:
        (from 资产负债表右)
     </span>
   </span>
-</td>
-<td class="p-1 trend">
+                            </td>
+                            <td class="p-1 trend">
   <span class="bar" style="display: none;">
     -5588019638.61,-8334512252.23,-8899177880.8,-16441093160.06,-21618403387.19
   </span>
-</td>
-  <td class="p-1">
-    {}
-  </td>
-  <td class="p-1">
-    {}
-  </td>
-  <td class="p-1">
-    {}
-  </td>
-  <td class="p-1">
-    {}
-  </td>
-  <td class="p-1">
-    {}
-  </td>
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
 
-      </tr>
-      <tr class="table-secondary">
-        <td class="p-1">
+                        </tr>
+                        <tr class="table-secondary">
+                            <td class="p-1">
   <span>
     期末现金
     <br>
@@ -1371,39 +1444,73 @@ class HtmlMaker:
 
     </span>
   </span>
-</td>
-<td class="p-1 trend">
+                            </td>
+                            <td class="p-1 trend">
   <span class="bar" style="display: none;">
     34780485904.57,62794794812.99,74928080750.58,98243288299.54,102161564884.69
   </span>
-</td>
-  <td class="p-1">
-    {}
-  </td>
-  <td class="p-1">
-    {}
-  </td>
-  <td class="p-1">
-    {}
-  </td>
-  <td class="p-1">
-    {}
-  </td>
-  <td class="p-1">
-    {}
-  </td>
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
 
-  </tr>
-    </tbody>
-  </table>
-          </div>
-          <!-- 季度 -->
-          <!-- <div class="tab-pane al-description fade" id="alcf-quarterly" role="tabpanel" aria-labelledby="alcf-alquarterly-tab"> -->
-          <!-- </div> -->
+                        </tr>
+                        <tr class="table-secondary">
+                            <td class="p-1">
+  <span>
+    自由现金流（FCF）
+    <br>
+    <span class="small">
+
+    </span>
+  </span>
+                            </td>
+                            <td class="p-1 trend">
+  <span class="bar" style="display: none;">
+    34780485904.57,62794794812.99,74928080750.58,98243288299.54,102161564884.69
+  </span>
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+                            <td class="p-1">
+                                {}
+                            </td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- 季度 -->
+                <!-- <div class="tab-pane al-description fade" id="alcf-quarterly" role="tabpanel" aria-labelledby="alcf-alquarterly-tab"> -->
+                <!-- </div> -->
+            </div>
         </div>
-      </div>
     </div>
-  </div></body></html>
+</div>
+</body>
+</html>
         '''.format(*all_li)
 
         with open('HTML/zfb_index.html', 'w', encoding="utf8") as f:

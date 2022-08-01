@@ -46,7 +46,7 @@ class Report_dealer:
                         result.update(temp[item])
                     break
                 else:
-                    print(str(year) + '-12-31, not found')
+                    # print(str(year) + '-12-31, not found')
                     continue
             if len(result) > 0:
                 results.append(result)
@@ -374,6 +374,7 @@ class Report_dealer:
     def cashFlowStm(self):
         info_all = list(self.info)
         cashFlowS = {}
+        print("Report_dealer cashFlowStm info_all")
         print(json.dumps(info_all, ensure_ascii=False))
         cashFlowS["zwjc"] = info_all[0]["zwjc"]
         cashFlowS["code"] = info_all[0]["code"]
@@ -705,4 +706,5 @@ class Report_dealer:
 if __name__ == '__main__':
     Rd = Report_dealer("603993", years=contants.YEARS)
     r = Rd.scheduler()
+    print("Rd.scheduler() result")
     print(json.dumps(r, ensure_ascii=False))
