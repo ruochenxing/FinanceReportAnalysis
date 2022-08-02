@@ -374,7 +374,7 @@ class Report_dealer:
     def cashFlowStm(self):
         info_all = list(self.info)
         cashFlowS = {}
-        print("Report_dealer cashFlowStm info_all")
+        print("Report_dealer origin db data info_all")
         print(json.dumps(info_all, ensure_ascii=False))
         cashFlowS["zwjc"] = info_all[0]["zwjc"]
         cashFlowS["code"] = info_all[0]["code"]

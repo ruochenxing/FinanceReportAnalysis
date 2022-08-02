@@ -30,7 +30,7 @@ class Report_index:
     def getData(self):
         Rd = Report_dealer(self.scode, years=self.years)
         self.info = Rd.scheduler()
-        print("Report_dealer scheduler")
+        print("Report_dealer result")
         print(json.dumps(self.info, ensure_ascii=False))
 
     def getData_cwzy(self):
@@ -257,6 +257,7 @@ if __name__ == '__main__':
     ndarray_display = True
     Rp = Report_index(code="603993", years=contants.YEARS)
     r = Rp.scheduler()
+    print("report index result")
     if ndarray_display:
         print(json.dumps(r, ensure_ascii=False))
     else:

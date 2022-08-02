@@ -6,10 +6,60 @@ from analyzer.Report_index import Report_index
 from pyqt import contants
 
 
+def polyline_maker(li):
+    '''
+
+    :param li: [96,90,21,23,89,80]
+    :return:
+    '''
+    li2 = li
+
+    while "∞" in li2:
+        li2.remove("∞")
+    while "-∞" in li2:
+        li2.remove("-∞")
+
+    if li2 != None:
+        try:
+            c1_max = max(li2)  # 取出最大值
+        except:
+            print(li2)
+        try:
+            d14 = 15 - (15 / c1_max) * li[4] + 0.5
+        except:
+            d14 = 0.5
+        try:
+            d13 = 15 - (15 / c1_max) * li[3] + 0.5
+        except:
+            d13 = 0.5
+        try:
+            d12 = 15 - (15 / c1_max) * li[2] + 0.5
+        except:
+            d12 = 0.5
+        try:
+            d11 = 15 - (15 / c1_max) * li[1] + 0.5
+        except:
+            d11 = 0.5
+        try:
+            d10 = 15 - (15 / c1_max) * li[0] + 0.5
+        except:
+            d10 = 0.5
+    else:
+        d10 = 0.5
+        d11 = 0.5
+        d12 = 0.5
+        d13 = 0.5
+        d14 = 0.5
+
+    polyline = '0 {} 8 {} 16 {} 24 {} 32 {}'.format(d10, d11, d12, d13, d14)
+    polygon = '0 15.5 {} 32 15.5'.format(polyline)
+    return polyline, polygon
+
+
 class HtmlMaker:
 
     def __init__(self, scode):
-        self.data_ = None
+        self.data_all = None
         self.data = None
         self.scode = scode
         self.getData1()
@@ -108,17 +158,18 @@ class HtmlMaker:
 
     def getData1(self):
         Ri = Report_index(self.scode, contants.YEARS)
-        self.data = Ri.scheduler()[0]
-        self.data_ = Ri.scheduler()
+        self.data_all = Ri.scheduler()
+        # self.data = Ri.scheduler()[0]
+        self.data = self.data_all[0]
         '''
         五类财务比率:
-            data={  '财务结构': {...},
+            self.data={  '财务结构': {...},
                     '偿债能力': {...},
                     '运营能力': {...},
                     '盈利能力': {...},
                     '成长能力': {...},
                     '现金流量': {...},
-        }
+            }
         现金流量：
             Ri.scheduler()[1]={ '期初现金':array(...),
                                 '+ 营业活动现金流量 (from 损益表)':array(...),
@@ -132,58 +183,11 @@ class HtmlMaker:
 
     '''生成画图的参数'''
 
-    def polyline_maker(self, li):
-        '''
-
-        :param li: [96,90,21,23,89,80]
-        :return:
-        '''
-        li2 = li
-
-        while "∞" in li2:
-            li2.remove("∞")
-        while "-∞" in li2:
-            li2.remove("-∞")
-
-        if li2 != None:
-            try:
-                c1_max = max(li2)  # 取出最大值
-            except:
-                print(li2)
-            try:
-                d14 = 15 - (15 / c1_max) * li[4] + 0.5
-            except:
-                d14 = 0.5
-            try:
-                d13 = 15 - (15 / c1_max) * li[3] + 0.5
-            except:
-                d13 = 0.5
-            try:
-                d12 = 15 - (15 / c1_max) * li[2] + 0.5
-            except:
-                d12 = 0.5
-            try:
-                d11 = 15 - (15 / c1_max) * li[1] + 0.5
-            except:
-                d11 = 0.5
-            try:
-                d10 = 15 - (15 / c1_max) * li[0] + 0.5
-            except:
-                d10 = 0.5
-        else:
-            d10 = 0.5
-            d11 = 0.5
-            d12 = 0.5
-            d13 = 0.5
-            d14 = 0.5
-
-        polyline = '0 {} 8 {} 16 {} 24 {} 32 {}'.format(d10, d11, d12, d13, d14)
-        polygon = '0 15.5 {} 32 15.5'.format(polyline)
-        return polyline, polygon
-
     '''Index_Html生成'''
 
     def index_maker(self):
+
+        # 五类财务比率 : 财务结构 偿债能力 ... data[0],data
         """财务结构"""
         data01 = self.reverse(self.data["财务结构"]["资产负债率(%)"])
         data02 = self.reverse(self.data["财务结构"]["长期资金占重资产比率(%)"])
@@ -436,40 +440,44 @@ class HtmlMaker:
                                 data51_3=data51[3],
                                 data51_4=data51[4],
 
-                                polyline01=self.polyline_maker(data01)[0], polygon01=self.polyline_maker(data01)[1],
-                                polyline02=self.polyline_maker(data02)[0], polygon02=self.polyline_maker(data02)[1],
-                                polyline11=self.polyline_maker(data11)[0], polygon11=self.polyline_maker(data11)[1],
-                                polyline12=self.polyline_maker(data12)[0], polygon12=self.polyline_maker(data12)[1],
-                                polyline13=self.polyline_maker(data13)[0], polygon13=self.polyline_maker(data13)[1],
+                                polyline01=polyline_maker(data01)[0], polygon01=polyline_maker(data01)[1],
+                                polyline02=polyline_maker(data02)[0], polygon02=polyline_maker(data02)[1],
+                                polyline11=polyline_maker(data11)[0], polygon11=polyline_maker(data11)[1],
+                                polyline12=polyline_maker(data12)[0], polygon12=polyline_maker(data12)[1],
+                                polyline13=polyline_maker(data13)[0], polygon13=polyline_maker(data13)[1],
 
-                                polyline21=self.polyline_maker(data21)[0], polygon21=self.polyline_maker(data21)[1],
-                                polyline22=self.polyline_maker(data22)[0], polygon22=self.polyline_maker(data22)[1],
-                                polyline23=self.polyline_maker(data23)[0], polygon23=self.polyline_maker(data23)[1],
-                                polyline24=self.polyline_maker(data24)[0], polygon24=self.polyline_maker(data24)[1],
-                                polyline25=self.polyline_maker(data25)[0], polygon25=self.polyline_maker(data25)[1],
-                                polyline26=self.polyline_maker(data26)[0], polygon26=self.polyline_maker(data26)[1],
-                                polyline27=self.polyline_maker(data27)[0], polygon27=self.polyline_maker(data27)[1],
+                                polyline21=polyline_maker(data21)[0], polygon21=polyline_maker(data21)[1],
+                                polyline22=polyline_maker(data22)[0], polygon22=polyline_maker(data22)[1],
+                                polyline23=polyline_maker(data23)[0], polygon23=polyline_maker(data23)[1],
+                                polyline24=polyline_maker(data24)[0], polygon24=polyline_maker(data24)[1],
+                                polyline25=polyline_maker(data25)[0], polygon25=polyline_maker(data25)[1],
+                                polyline26=polyline_maker(data26)[0], polygon26=polyline_maker(data26)[1],
+                                polyline27=polyline_maker(data27)[0], polygon27=polyline_maker(data27)[1],
 
-                                polyline31=self.polyline_maker(data31)[0], polygon31=self.polyline_maker(data31)[1],
-                                polyline32=self.polyline_maker(data32)[0], polygon32=self.polyline_maker(data32)[1],
-                                polyline34=self.polyline_maker(data34)[0], polygon34=self.polyline_maker(data34)[1],
-                                polyline35=self.polyline_maker(data35)[0], polygon35=self.polyline_maker(data35)[1],
-                                polyline36=self.polyline_maker(data36)[0], polygon36=self.polyline_maker(data36)[1],
-                                polyline37=self.polyline_maker(data37)[0], polygon37=self.polyline_maker(data37)[1],
-                                polyline38=self.polyline_maker(data38)[0], polygon38=self.polyline_maker(data38)[1],
-                                polyline39=self.polyline_maker(data39)[0], polygon39=self.polyline_maker(data39)[1],
+                                polyline31=polyline_maker(data31)[0], polygon31=polyline_maker(data31)[1],
+                                polyline32=polyline_maker(data32)[0], polygon32=polyline_maker(data32)[1],
+                                polyline34=polyline_maker(data34)[0], polygon34=polyline_maker(data34)[1],
+                                polyline35=polyline_maker(data35)[0], polygon35=polyline_maker(data35)[1],
+                                polyline36=polyline_maker(data36)[0], polygon36=polyline_maker(data36)[1],
+                                polyline37=polyline_maker(data37)[0], polygon37=polyline_maker(data37)[1],
+                                polyline38=polyline_maker(data38)[0], polygon38=polyline_maker(data38)[1],
+                                polyline39=polyline_maker(data39)[0], polygon39=polyline_maker(data39)[1],
 
-                                polyline41=self.polyline_maker(data41)[0], polygon41=self.polyline_maker(data41)[1],
-                                polyline42=self.polyline_maker(data42)[0], polygon42=self.polyline_maker(data42)[1],
-                                polyline43=self.polyline_maker(data43)[0], polygon43=self.polyline_maker(data43)[1],
-                                polyline51=self.polyline_maker(data51)[0], polygon51=self.polyline_maker(data51)[1])
+                                polyline41=polyline_maker(data41)[0], polygon41=polyline_maker(data41)[1],
+                                polyline42=polyline_maker(data42)[0], polygon42=polyline_maker(data42)[1],
+                                polyline43=polyline_maker(data43)[0], polygon43=polyline_maker(data43)[1],
+                                polyline51=polyline_maker(data51)[0], polygon51=polyline_maker(data51)[1])
         with open('HTML/rate_index.html', 'w', encoding="utf8") as f:
             f.write(html_region)
 
     '''Comment_Html生成'''
 
     def comment_maker(self):
-        data = self.data_
+        data = self.data_all
+        # 五类财务比率 : 财务结构 偿债能力 ... data[0]
+        # 资产部分 data[2]
+        # 现金流量表 data[3]
+
         '''现金能力'''
         # 现金与约当现金(占总资产%)
         value = data[2]["资产部分"]["现金与约当现金(%)"][0] * 100
@@ -881,8 +889,10 @@ class HtmlMaker:
     '''资产百分比、现金流_Html生成'''
 
     def zfb_maker(self):
-        data = self.data_
+        data = self.data_all
         zc_percent = []
+        # 资产部分 data[2]
+        # 现金流量表 data[3]
         tmp = data[2]["报表日期"]
         tmp.reverse()
         zc_percent.extend(tmp)
